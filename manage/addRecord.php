@@ -1,10 +1,14 @@
 <?php 
+session_start();
 // Protection against xss attacks, also for correctly insert to db
 $text = '"'.htmlspecialchars($_POST["textarea"]).'"';
 
 $title = '"'.htmlspecialchars($_POST["title"]).'"';
 $date = '"'.htmlspecialchars($_POST["date"]).'"';
-if(strlen(date) <= 0){
+
+$author = '"'.htmlspecialchars($_SESSION["email"]).'"';
+
+if(strlen($date) <= 2){
     $date = '"'.htmlspecialchars(date("F j, Y, H:i")).'"'; // Example: January 21, 2019, 16:24
 }
 // Open connection with db
@@ -14,13 +18,14 @@ $db = new SQLite3('../diary.db');
 if ($db->exec("CREATE TABLE if not exists 'diary'
 		('id' INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , 
 		'title' TEXT,
+		'author' TEXT,
 		'date' TEXT,
 		'text' TEXT
 		)
 "));
 // Request to base
-$req = "INSERT INTO diary (title, date, text ) 
-    VALUES (".$title."," . $date . "," . $text .")";
+$req = "INSERT INTO diary (title, author, date, text ) 
+    VALUES (".$title."," . $author . "," . $date . "," . $text .")";
 
 // run and check for errors
 if(!$db->exec($req)) {

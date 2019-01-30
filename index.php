@@ -1,16 +1,30 @@
 <?php 
 // Open sqlite3 database
 $db = new SQLite3('diary.db');
+session_start();
 
-// Create table if she doesn't exist
+// Create table if not exist
 if ($db->exec("CREATE TABLE if not exists 'diary'
 		('id' INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , 
 		'title' TEXT,
+		'author' TEXT,
 		'date' TEXT,
 		'text' TEXT
 		)
 "));
 
+// Authorization
+// Create table if she doesn't exist
+if ($db->exec("CREATE TABLE if not exists 'logins'
+		('id' INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , 
+		'email' TEXT,
+		'password' TEXT
+		)
+"))
+
+if (!isset($_SESSION['email'])) {
+    die(header('Location: login/login.php'));
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,11 +43,12 @@ if ($db->exec("CREATE TABLE if not exists 'diary'
 </head>
 
 <body>
-    <script>
-        var instance = M.Tabs.init(el, options);
-    </script>
+    <div class="header center">
+        <?php echo "Welcome, ".$_SESSION['email']."" ?> <br>
+        <a href="login/logout.php">Logout</a>
+    </div>
     <div class="container">
-        <h1 class="center">OwnDiary - your diary.</h1>
+        <h1 class="center">OwnDiary</h1>
         <!-- Form for quicken add record -->
         <form action="manage/addRecord.php" method="post">
             <div class="input-field col s12">
@@ -52,13 +67,12 @@ if ($db->exec("CREATE TABLE if not exists 'diary'
         <div>
             <h5 class="center">All records</h5>
             <div>
-
                 <?php 
                 // Parse data from DB, order by 'id' desc(100..1)
                 $results = $db->query('SELECT * FROM diary ORDER by id DESC');
                 while ($row = $results->fetchArray()) {
                     echo "<a href='/manage/record.php?id=".$row['id']."'><h5> ".$row['title']."</h5> </a>" // Header and link to full record
-                    ."<blockquote>".$row['date']."</blockquote>" // date
+                    ."<blockquote>".$row['date']." by ".$row['author']."</blockquote>" // date & author
                     ."<p class='truncate'>".$row['text']."</p>" // truncated text
                     ."<div class='divider'></div>"; // divider, also can use <hr>
                 }

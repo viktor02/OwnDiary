@@ -10,7 +10,7 @@ $results = $db->query('SELECT * FROM diary WHERE id='.$id);
 // Array with data
 $row = $results->fetchArray();
 $title = $row['title'];
-
+$author = $row['author'];
 // Decode html tags.
 // Remake. I don't know how make it normally
 /* 
@@ -47,8 +47,11 @@ $host = "'"."http://".$host."'";
             <?php echo $title ?>
         </h2>
         <blockquote>
+        <!-- Print date and author -->
             <?php echo $date ?>
+            <?php echo "<br><strong>".$author."</strong>" ?>
         </blockquote>
+        <p></p>
         <p>
             <?php 
             // Allow some tags in text
