@@ -1,15 +1,15 @@
 <?php 
 session_start();
-// Protection against xss attacks, also for correctly insert to db
-$text = '"'.htmlspecialchars($_POST["textarea"]).'"';
+// Protection against xss attacks
+$text = htmlspecialchars($_POST["textarea"]);
 
-$title = '"'.htmlspecialchars($_POST["title"]).'"';
-$date = '"'.htmlspecialchars($_POST["date"]).'"';
+$title = htmlspecialchars($_POST["title"]);
+$date = htmlspecialchars($_POST["date"]);
 
-$author = '"'.htmlspecialchars($_SESSION["email"]).'"';
+$author = htmlspecialchars($_SESSION["email"]);
 
 if(strlen($date) <= 2){
-    $date = '"'.htmlspecialchars(date("F j, Y, H:i")).'"'; // Example: January 21, 2019, 16:24
+    $date = htmlspecialchars(date("F j, Y, H:i")); // Example: January 21, 2019, 16:24
 }
 // Change perms
 if (substr(sprintf('%o', fileperms('/tmp')), -4) !== 0666){
@@ -29,7 +29,7 @@ if ($db->exec("CREATE TABLE if not exists 'diary'
 "));
 // Request to base
 $req = "INSERT INTO diary (title, author, date, text ) 
-    VALUES (".$title."," . $author . "," . $date . "," . $text .")";
+    VALUES ('$title','$author','$date','$text')";
 
 // run and check for errors
 if(!$db->exec($req)) {
