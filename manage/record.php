@@ -11,6 +11,7 @@ $results = $db->query('SELECT * FROM diary WHERE id='.$id);
 $row = $results->fetchArray();
 $title = $row['title'];
 $author = $row['author'];
+
 // Decode html tags.
 // Remake. I don't know how make it normally
 /* 
@@ -19,11 +20,6 @@ In short. At the same time, a string is added to the database, which is encoded 
 $text = htmlspecialchars_decode($row['text']);
 
 $date = $row['date'];
-
-$host = $_SERVER['HTTP_HOST'];
-$host = "'"."http://".$host."'";
-
-
 ?>
 
 <!DOCTYPE html>
@@ -57,7 +53,7 @@ $host = "'"."http://".$host."'";
             echo strip_tags($text, '<p><b><i><blockquote><br><del><strong><em><s><li><ol>'); 
             ?>
         </p>
-        <div class="center-align" style="padding: 20px;"><a class="waves-effect waves-light btn-large" href=<?php echo $host ?> >Back</a></div>
+        <div class="center-align" style="padding: 20px;"><a class="waves-effect waves-light btn-large" href="<?php echo 'http://'.$_SERVER['HTTP_HOST'] ?>" >Back</a></div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
