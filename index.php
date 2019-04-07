@@ -46,6 +46,7 @@ if (!isset($_SESSION['email'])) {
     <div class="header center">
         <?php echo "Welcome, ".$_SESSION['email']."" ?> <br>
         <a href="login/logout.php">Logout</a>
+        <a href=""></a>
     </div>
     <div class="container">
         <h1 class="center">OwnDiary</h1>

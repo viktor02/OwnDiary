@@ -21,14 +21,14 @@
         <form action="logincheck.php" method="post">
         <div class="row">
             <div class="input-field col s12">
-                <input id="email" type="email" name="email" class="validate">
-                <label for="email">Email</label>
+                <input id="email" type="email" name="email" class="validate" placeholder="Email">
+                <!-- <label for="email">Email</label> -->
             </div>
         </div>
         <div class="row">
             <div class="input-field col s12">
-                <input id="password" type="password" name="password" class="validate">
-                <label for="password">Password</label>
+                <input id="password" type="password" name="password" class="validate" placeholder="Password">
+                <!-- <label for="password">Password</label> -->
             </div>
         </div>
         <div class="row center" >

@@ -51,7 +51,6 @@ $host = "'"."http://".$host."'";
             <?php echo $date ?>
             <?php echo "<br><strong>".$author."</strong>" ?>
         </blockquote>
-        <p></p>
         <p>
             <?php 
             // Allow some tags in text

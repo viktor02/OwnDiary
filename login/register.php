@@ -1,4 +1,15 @@
 <?php 
+// Thanks Stephen Watkins from StackOverflow
+function generateRandomString($length = 10) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
+
 // Open sqlite3 database
 $db = new SQLite3('../diary.db');
 
@@ -7,40 +18,37 @@ $db = new SQLite3('../diary.db');
 if ($db->exec("CREATE TABLE if not exists 'logins'
 		('id' INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , 
 		'email' TEXT,
-		'password' TEXT
+		'password' TEXT,
+		'salt' TEXT
 		)
 "))
 
 $email = $_POST['email'];
+$email = htmlspecialchars($email);
 $password = $_POST['password'];
+$password = htmlspecialchars($password);
+
+$salt = generateRandomString();
 
 if(!empty($email) AND !empty($password)){
-	// echo "Не пусты";
+	// hashing SHA1 with salt
+	$password = sha1($password . $salt);
 	
-	// Оборачивание, чтобы запрос прошел в базу
-	$email = '"'.htmlspecialchars($email).'"';
-	
-	// Double hashing SHA1
-	$password = sha1(sha1($password));
-	// Оборачивание, чтобы запрос прошел в базу
-	$password = '"'.htmlspecialchars($password).'"';
-
 	// Request to base
-	$req = "INSERT INTO logins (email, password ) 
-		VALUES (".$email."," . $password.")";
+	$req = "INSERT INTO logins (email, password, salt ) 
+		VALUES ('$email', '$password', '$salt')";
 
 	// run and check for errors
 	if($db->exec($req)) {
-		echo "<div class='center'>
+		die("<div class='center'>
 		Congratulation! You registered! Now <a href='login.php'>login</a>
-		</div>";
+		</div>");
 	}
 	else{
-		echo "Error: ".$req;
+		die("Error");
 	}
 
 }
-// echo "email: ".$email."<br>Password: ".$password;
 
 
 ?>
@@ -67,14 +75,12 @@ if(!empty($email) AND !empty($password)){
 		<form action="" method="post">
 		<div class="row">
 			<div class="input-field col s12">
-				<input id="email" type="email" class="validate" name="email">
-				<label for="email">Email</label>
+				<input id="email" type="email" class="validate" name="email" placeholder="Email">
 			</div>
 		</div>
 		<div class="row">
 			<div class="input-field col s12">
-				<input id="password" type="password" class="validate" name="password">
-				<label for="password">Password</label>
+				<input id="password" type="password" class="validate" name="password" placeholder="Password">
 			</div>
 		</div>
 		<div class="row center" >

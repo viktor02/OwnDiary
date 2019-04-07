@@ -11,6 +11,10 @@ $author = '"'.htmlspecialchars($_SESSION["email"]).'"';
 if(strlen($date) <= 2){
     $date = '"'.htmlspecialchars(date("F j, Y, H:i")).'"'; // Example: January 21, 2019, 16:24
 }
+// Change perms
+if (substr(sprintf('%o', fileperms('/tmp')), -4) !== 0666){
+    chmod("../diary.db", 0666);
+}
 // Open connection with db
 $db = new SQLite3('../diary.db');
 
@@ -29,7 +33,10 @@ $req = "INSERT INTO diary (title, author, date, text )
 
 // run and check for errors
 if(!$db->exec($req)) {
-    //echo $req;
+    exit("Error");
+    $error = sqlite_last_error();
+    var_dump($error);
+    sqlite_error_string(sqlite_last_error());
 } 
 
 // Close connection with db
