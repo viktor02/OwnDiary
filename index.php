@@ -13,15 +13,6 @@ if ($db->exec("CREATE TABLE if not exists 'diary'
 		)
 "));
 
-// Authorization
-// Create table if she doesn't exist
-if ($db->exec("CREATE TABLE if not exists 'logins'
-		('id' INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , 
-		'email' TEXT,
-		'password' TEXT
-		)
-"))
-
 if (!isset($_SESSION['email'])) {
     die(header('Location: login/login.php'));
 }
