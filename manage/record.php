@@ -1,4 +1,7 @@
 <?php 
+/*
+ * FIXME: decode html tags 
+ */
 // Open connection
 $db = new SQLite3('../diary.db');
 
@@ -45,7 +48,7 @@ $date = $row['date'];
         <blockquote>
         <!-- Print date and author -->
             <?php echo $date ?>
-            <?php echo "<br><strong>".$author."</strong>" ?>
+            <?php echo "<br><em>by</em> ".$author."" ?>
         </blockquote>
         <p>
             <?php 

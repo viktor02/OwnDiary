@@ -18,15 +18,15 @@ $db = new SQLite3('../diary.db');
 if ($db->exec("CREATE TABLE if not exists 'logins'
 		('id' INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , 
 		'email' TEXT,
+		'nickname' TEXT,
 		'password' TEXT,
 		'salt' TEXT
-		)
-"))
+		) 
+	"))
 
-$email = $_POST['email'];
-$email = htmlspecialchars($email);
-$password = $_POST['password'];
-$password = htmlspecialchars($password);
+$email = SQLite3::escapeString(htmlentities($_POST["email"]));
+$nickname = SQLite3::escapeString(htmlentities($_POST["nickname"]));
+$password = SQLite3::escapeString(htmlentities($_POST["password"]));
 
 $salt = generateRandomString();
 
@@ -35,8 +35,8 @@ if(!empty($email) AND !empty($password)){
 	$password = sha1($password . $salt);
 	
 	// Request to base
-	$req = "INSERT INTO logins (email, password, salt ) 
-		VALUES ('$email', '$password', '$salt')";
+	$req = "INSERT INTO logins (email, nickname, password, salt ) 
+		VALUES ('$email', '$nickname', '$password',  '$salt')";
 
 	// run and check for errors
 	if($db->exec($req)) {
@@ -76,6 +76,11 @@ if(!empty($email) AND !empty($password)){
 		<div class="row">
 			<div class="input-field col s12">
 				<input id="email" type="email" class="validate" name="email" placeholder="Email">
+			</div>
+		</div>
+		<div class="row">
+			<div class="input-field col s12">
+				<input id="nickname" type="text" class="validate" name="nickname" placeholder="Nickname">
 			</div>
 		</div>
 		<div class="row">

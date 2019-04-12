@@ -35,7 +35,7 @@ if (!isset($_SESSION['email'])) {
 
 <body>
     <div class="header center">
-        <?php echo "Welcome, ".$_SESSION['email']."" ?> <br>
+        <?php echo "Welcome, ".$_SESSION['nickname'] ?> <br>
         <a href="login/logout.php">Logout</a>
         <a href=""></a>
     </div>
@@ -60,11 +60,13 @@ if (!isset($_SESSION['email'])) {
             <h5 class="center">All records</h5>
             <div>
                 <?php 
+                $author = SQLite3::escapeString(htmlspecialchars($_SESSION["nickname"]));
+                
                 // Parse data from DB, order by 'id' desc(100..1)
-                $results = $db->query('SELECT * FROM diary ORDER by id DESC');
+                $results = $db->query("SELECT * FROM diary WHERE author = '$author' ORDER by id DESC");
                 while ($row = $results->fetchArray()) {
                     echo "<a href='/manage/record.php?id=".$row['id']."'><h5> ".$row['title']."</h5> </a>" // Header and link to full record
-                    ."<blockquote>".$row['date']." by ".$row['author']."</blockquote>" // date & author
+                    ."<blockquote>".$row['date']." <em>by</em> ".$row['author']."</blockquote>" // date & author
                     ."<p class='truncate'>".$row['text']."</p>" // truncated text
                     ."<div class='divider'></div>"; // divider, also can use <hr>
                 }

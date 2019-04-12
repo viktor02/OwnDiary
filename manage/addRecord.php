@@ -1,16 +1,18 @@
 <?php 
 session_start();
+
 // Protection against xss attacks
-$text = htmlspecialchars($_POST["textarea"]);
+$text =  SQLite3::escapeString(htmlentities($_POST["textarea"]));
 
-$title = htmlspecialchars($_POST["title"]);
-$date = htmlspecialchars($_POST["date"]);
+$title = SQLite3::escapeString(htmlentities($_POST["title"]));
+$date = SQLite3::escapeString(htmlentities($_POST["date"]));
 
-$author = htmlspecialchars($_SESSION["email"]);
+$author = SQLite3::escapeString(htmlentities($_SESSION["nickname"]));
 
 if(strlen($date) <= 2){
-    $date = htmlspecialchars(date("F j, Y, H:i")); // Example: January 21, 2019, 16:24
+    $date = htmlentities(date("F j, Y, H:i")); // Example: January 21, 2019, 16:24
 }
+
 // Change perms
 if (substr(sprintf('%o', fileperms('/tmp')), -4) !== 0666){
     chmod("../diary.db", 0666);
@@ -18,15 +20,7 @@ if (substr(sprintf('%o', fileperms('/tmp')), -4) !== 0666){
 // Open connection with db
 $db = new SQLite3('../diary.db');
 
-// Create table if not exist
-if ($db->exec("CREATE TABLE if not exists 'diary'
-		('id' INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , 
-		'title' TEXT,
-		'author' TEXT,
-		'date' TEXT,
-		'text' TEXT
-		)
-"));
+
 // Request to base
 $req = "INSERT INTO diary (title, author, date, text ) 
     VALUES ('$title','$author','$date','$text')";
@@ -34,9 +28,6 @@ $req = "INSERT INTO diary (title, author, date, text )
 // run and check for errors
 if(!$db->exec($req)) {
     exit("Error");
-    $error = sqlite_last_error();
-    var_dump($error);
-    sqlite_error_string(sqlite_last_error());
 } 
 
 // Close connection with db
