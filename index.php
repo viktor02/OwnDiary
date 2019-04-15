@@ -17,6 +17,7 @@ if (!isset($_SESSION['email'])) {
     die(header('Location: login/login.php'));
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,65 +25,61 @@ if (!isset($_SESSION['email'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>OwnDiary - your diary.</title>
-
-    <!-- Use materialize framework -->
-    <!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <title>OwnDiary</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 <body>
-    <div class="header center">
-        <?php echo "Welcome, ".$_SESSION['nickname'] ?> <br>
-        <a href="login/logout.php">Logout</a>
-        <a href=""></a>
-    </div>
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="/">OwnDiary</a>
+        <div class="my-2 my-lg-0 text-muted">
+            <?php echo "Welcome, <a href='profile.php'>".$_SESSION['username']."</a>" ?>
+        </div>
+    </nav>
+
     <div class="container">
-        <h1 class="center">OwnDiary</h1>
-        <!-- Form for quicken add record -->
-        <form action="manage/addRecord.php" method="post">
-            <div class="input-field col s12">
-                <h5 class="center">Quick add record to diary.</h5>
-                <input type="text" name="title" placeholder="Title"> </input>
-                <textarea id="textarea1" name="textarea" class="materialize-textarea" placeholder="Add record"></textarea>
-                <div class="center-align">
-                    <button class="btn waves-effect waves-light" type="submit" name="action">Submit
-                        <i class="material-icons right">send</i>
-                    </button>
-                    <a class="waves-effect waves-light btn" href="manage/editor.php">Or go in editor</a>
+        <form action="manage/addRecord.php" method="post" class="mt-3">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Title" aria-label="Title"
+                    aria-describedby="basic-addon2" name="title">
+                <div class="input-group-append">
+                    <input class="btn btn-outline-secondary" type="submit"></input>
                 </div>
-
             </div>
+
+            <textarea class="form-control mt-2" name="textarea" rows="3" placeholder="Your text here."></textarea>
+
         </form>
-        <div>
-            <h5 class="center">All records</h5>
-            <div>
-                <?php 
-                $author = SQLite3::escapeString(htmlspecialchars($_SESSION["nickname"]));
-                
-                // Parse data from DB, order by 'id' desc(100..1)
-                $results = $db->query("SELECT * FROM diary WHERE author = '$author' ORDER by id DESC");
-                while ($row = $results->fetchArray()) {
-                    echo "<a href='/manage/record.php?id=".$row['id']."'><h5> ".$row['title']."</h5> </a>" // Header and link to full record
-                    ."<blockquote>".$row['date']." <em>by</em> ".$row['author']."</blockquote>" // date & author
-                    ."<p class='truncate'>".$row['text']."</p>" // truncated text
-                    ."<div class='divider'></div>"; // divider, also can use <hr>
-                }
+        <hr>
+        <h1>Your records</h1>
+        <div class="mt-4">
+        <?php 
+            $author = SQLite3::escapeString(htmlspecialchars($_SESSION["username"]));
+            
+            // Parse data from DB, order by 'id' desc(100..1)
+            $results = $db->query("SELECT * FROM diary WHERE author = '$author' ORDER by id DESC");
+            while ($row = $results->fetchArray()) {
+                echo "<a style='text-decoration: none'  href='record.php?id=".$row['id']."'><h3> ".$row['title']."</h3> </a>" // Header and link to full record
+                ."<p class='font-italic text-muted'>".$row['date']." by <em>".$row['author']."</em></p>" // date & author
+                ."<p class='text-truncate'>".$row['text']."</p>" // truncated text
+                ."<hr>"; // divider
+            }
 
-                // Close connection
-                $db->close();
-            ?>
-            </div>
-        </div>
-        <div class="footer">
-            <p>Viktor Karpov 2019</p>
+            // Close connection
+            $db->close();
+        ?>
         </div>
     </div>
-
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
 </body>
 
 </html>

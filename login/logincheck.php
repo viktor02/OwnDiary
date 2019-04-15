@@ -23,7 +23,7 @@ if(!empty($email) AND !empty($password)){
     if($dbpass == $password) {
         $_SESSION['email'] = $row['email']; // set session
         $_SESSION['validateTime'] = time(); // set session
-        $_SESSION['nickname'] = $row['nickname'];
+        $_SESSION['username'] = $row['username'];
         die(header('Location: ../index.php'));
     }
     else{

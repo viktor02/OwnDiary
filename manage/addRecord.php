@@ -7,7 +7,7 @@ $text =  SQLite3::escapeString(htmlentities($_POST["textarea"]));
 $title = SQLite3::escapeString(htmlentities($_POST["title"]));
 $date = SQLite3::escapeString(htmlentities($_POST["date"]));
 
-$author = SQLite3::escapeString(htmlentities($_SESSION["nickname"]));
+$author = SQLite3::escapeString(htmlentities($_SESSION["username"]));
 
 if(strlen($date) <= 2){
     $date = htmlentities(date("F j, Y, H:i")); // Example: January 21, 2019, 16:24
