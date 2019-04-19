@@ -2,11 +2,17 @@
 // Open sqlite3 database
 $db = new SQLite3('../diary.db');
 session_start();
+$currentEmail = $_SESSION['email'];
+$results = $db->query("SELECT role from logins where email = '$currentEmail' ");
 
+$row = $results->fetchArray();
+
+// If don't sign in
 if (!isset($_SESSION['email'])) {
     die(header('Location: login/login.php'));
 }
-if( $_SESSION['email'] != 'vitka.k@yandex.ru'){
+// If I'm have admin role
+if( $row['role'] != 'admin'){
     $host = $_SERVER['HTTP_HOST'];
     die(header("Location: http://$host"));
 }
@@ -33,7 +39,7 @@ if( $_SESSION['email'] != 'vitka.k@yandex.ru'){
         </ul>
 
         <div class="my-2 my-lg-0">
-            <?php echo "Welcome, ".$_SESSION['username'] ?>
+            <?php echo "Welcome, <a href='profile.php'>".$_SESSION['username']."</a>" ?>
         </div>
     </nav>
     <div class="container mt-4">
@@ -101,6 +107,7 @@ if( $_SESSION['email'] != 'vitka.k@yandex.ru'){
                     <th scope="col">Username</th>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
+                    <th scope="col">Role</th>
                     <th scope="col">Hash of password</th>
                 </tr>
             </thead>
@@ -112,18 +119,19 @@ if( $_SESSION['email'] != 'vitka.k@yandex.ru'){
                     /* FIXME: Offhhh, its can be dangerous? */
 
                     $id = $row['id'];
-                    $id = "<a href='profile.php?id=$id'>$id</a>";
+                    $id = "<a href='../profile.php?id=$id'>$id</a>";
                     $email = $row['email']; 
                     $username = $row['username'];
                     $name = $row['name'];
                     $password = $row['password'];
-
+                    $role = $row['role'];
                     echo "
                     <tr>
                     <th scope='row'> $id </th> 
                     <td> $username </td>
                     <td> $name </td>
                     <td> $email </td>
+                    <td> $role </td>
                     <td> $password </td>
                     </tr>
                     ";

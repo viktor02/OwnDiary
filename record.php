@@ -4,7 +4,7 @@
  */
 // Open connection
 $db = new SQLite3('diary.db');
-
+session_start();
 $id = htmlspecialchars($_GET["id"]);
 
 // Request
@@ -49,17 +49,18 @@ $date = $row['date'];
         </ul>
 
         <div class="my-2 my-lg-0">
-            <?php echo "Welcome, ".$_SESSION['username'] ?>
+            <?php echo "Welcome, <a href='profile.php'>".$_SESSION['username']."</a>" ?>
         </div>
     </nav>
     
     <div class="card text-center">
-        <div class="card-header">
-            <h4> <?php echo $author ?> </h4>
+        <div class="card-header text-left">
+            <h4 class="col-4"> <?php echo $author ?> </h4>
+            <p class="col-4 text-muted"> <?php echo $date ?> </p>
         </div>
         <div class="card-body">
             <h3 class="card-title">
-                <?php echo $title ?>
+                <?php echo $title  ?>
             </h3>
             <p class="card-text">
                 <?php 
@@ -68,9 +69,6 @@ $date = $row['date'];
                 ?>
             </p>
             <a href="<?php echo 'http://'.$_SERVER['HTTP_HOST'] ?>" class="btn btn-outline-secondary">Go back</a>
-        </div>
-        <div class="card-footer text-muted">
-            <?php echo $date ?>
         </div>
     </div>
 
