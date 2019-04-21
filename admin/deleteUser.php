@@ -5,19 +5,18 @@ $id = SQLite3::escapeString(htmlentities( $_POST['id'] ));
 
 session_start();
 
-// if user dont login
+// If don't sign in
 if (!isset($_SESSION['email'])) {
-    $host = $_SERVER['HTTP_HOST'];
-    die(header("Location: http://$host"));
+    die(header('Location: login/login.php'));
 }
-// if user not a admin
-if( $_SESSION['email'] != 'vitka.k@yandex.ru'){
+// If I'm have admin role
+if( $_SESSION['role'] != 'admin'){
     $host = $_SERVER['HTTP_HOST'];
     die(header("Location: http://$host"));
 }
 
 $db = new SQLite3('../diary.db');
-$req = "DELETE FROM 'diary' WHERE id = $id";
+$req = "DELETE FROM 'logins' WHERE id = $id";
 if(!$db->query($req)){
     die("Error.");
 }
@@ -25,5 +24,8 @@ if(!$db->query($req)){
 $db->close();
 
 // Go back
-header("Location: ".$_SERVER['HTTP_REFERER']);
+// header("Location: ".$_SERVER['HTTP_REFERER']);
+echo "Success";
+echo "<script>window.history.go(-1);</script>";
+die();
 ?>

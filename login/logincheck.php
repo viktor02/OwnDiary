@@ -5,8 +5,8 @@ session_start();
 // Open sqlite3 database
 $db = new SQLite3('../diary.db');
 
-$email = htmlspecialchars($_POST['email']);
-$password = htmlspecialchars($_POST['password']);
+$email = SQLite3::escapeString(htmlspecialchars($_POST['email']));
+$password = SQLite3::escapeString(htmlspecialchars($_POST['password']));
 
 if(!empty($email) AND !empty($password)){	
 	// Request to base
@@ -24,6 +24,7 @@ if(!empty($email) AND !empty($password)){
         $_SESSION['email'] = $row['email']; // set session
         $_SESSION['validateTime'] = time(); // set session
         $_SESSION['username'] = $row['username'];
+        $_SESSION['role'] = $row['role'];
         die(header('Location: ../index.php'));
     }
     else{

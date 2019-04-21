@@ -2,17 +2,18 @@
 // Open sqlite3 database
 $db = new SQLite3('../diary.db');
 session_start();
-$currentEmail = $_SESSION['email'];
-$results = $db->query("SELECT role from logins where email = '$currentEmail' ");
 
-$row = $results->fetchArray();
+// $currentEmail = $_SESSION['email'];
+// $results = $db->query("SELECT role from logins where email = '$currentEmail' ");
+
+// $row = $results->fetchArray();
 
 // If don't sign in
 if (!isset($_SESSION['email'])) {
     die(header('Location: login/login.php'));
 }
 // If I'm have admin role
-if( $row['role'] != 'admin'){
+if( $_SESSION['role'] != 'admin'){
     $host = $_SERVER['HTTP_HOST'];
     die(header("Location: http://$host"));
 }
@@ -25,43 +26,83 @@ if( $row['role'] != 'admin'){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Admin panel</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
 </head>
 
 <body>
-    <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="/">OwnDiary</a>
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item disable">
-                Admin panel
-            </li>
-        </ul>
-
-        <div class="my-2 my-lg-0">
-            <?php echo "Welcome, <a href='profile.php'>".$_SESSION['username']."</a>" ?>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">OwnDiary</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.php">Profile</a>
+                </li>
+                <?php if($_SESSION['role'] == 'admin'){
+                    echo "<li class='nav-item'>";
+                    echo "<a class='nav-link active' href='/admin/'>Admin panel</a>";
+                    echo "</li>";
+                }
+                ?>
+            </ul>
         </div>
     </nav>
     <div class="container mt-4">
-        <form action="deletePost.php" method="post" class="mt-3">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Delete user" aria-label="Delete user"
-                    aria-describedby="basic-addon2" name="id">
-                <div class="input-group-append">
-                    <input class="btn btn-outline-secondary" type="submit"></input>
+        <p>
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#deletePost"
+                aria-expanded="true" aria-controls="collapseExample">
+                Delete post
+            </button>
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#deleteUser"
+                aria-expanded="false" aria-controls="collapseExample">
+                Delete user
+            </button>
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#setRole"
+                aria-expanded="false" aria-controls="collapseExample">
+                Set role
+            </button>
+        </p>
+        <div class="collapse" id="deletePost">
+            <form action="deleteUser.php" method="post" class="mt-3">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Delete post" aria-label="Delete post"
+                        aria-describedby="basic-addon2" name="id">
+                    <div class="input-group-append">
+                        <input class="btn btn-outline-secondary" type="submit"></input>
+                    </div>
                 </div>
-            </div>
-        </form>
-        <p>Or</p>
-        <form action="deleteUser.php" method="post" class="mt-3">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Delete post" aria-label="Delete post"
-                    aria-describedby="basic-addon2" name="id">
-                <div class="input-group-append">
-                    <input class="btn btn-outline-secondary" type="submit"></input>
+            </form>
+        </div>
+        <div class="collapse" id="deleteUser">
+            <form action="deleteUser.php" method="post" class="mt-3">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Delete user" aria-label="Delete user"
+                        aria-describedby="basic-addon2" name="id">
+                    <div class="input-group-append">
+                        <input class="btn btn-outline-secondary" type="submit"></input>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
+        <div class="collapse" id="setRole">
+            <form action="setRole.php" method="post" class="mt-3">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="id" aria-label="id"
+                        aria-describedby="basic-addon2" name="id">
+                    <input type="text" class="form-control" placeholder="Set role" aria-label="set role"
+                        aria-describedby="basic-addon2" name="role">
+                    <div class="input-group-append">
+                        <input class="btn btn-outline-secondary" type="submit"></input>
+                    </div>
+                </div>
+            </form>
+        </div>
         <h2 class="mt-2">List of records</h2>
         <!-- List of records -->
         <table class="table">
@@ -140,6 +181,9 @@ if( $row['role'] != 'admin'){
             </tbody>
         </table>
     </div>
+    <script src="../assets/js/jquery-3.3.1.slim.min.js"></script>
+    <script src="../assets/js/popper.min.js"></script>
+    <script src="../assets/js/bootstrap.min.js"></script>
 </body>
 
 </html>
