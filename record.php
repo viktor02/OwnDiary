@@ -40,7 +40,7 @@ $date = $row['date'];
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">OwnDiary</a>
+        <a class="navbar-brand" href="/">OwnDiary</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -65,17 +65,16 @@ $date = $row['date'];
             </ul>
         </div>
     </nav>
-    
-    <div class="card text-center">
+    <div class="card text-justify">
         <div class="card-header text-left">
             <h4 class="col-4"> <?php echo $author ?> </h4>
             <p class="col-4 text-muted"> <?php echo $date ?> </p>
         </div>
-        <div class="card-body">
+        <div class="card-body container">
             <h3 class="card-title">
                 <?php echo $title  ?>
             </h3>
-            <p class="card-text">
+            <p class="card-text " style="white-space: pre-line">
                 <?php 
                 // Allow some tags in text
                 echo strip_tags($text, '<p><b><i><blockquote><br><del><strong><em><s><li><ol>'); 

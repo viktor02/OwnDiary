@@ -14,6 +14,7 @@ if(strlen($date) <= 2){
 }
 
 // Change perms
+// Dont work.
 if (substr(sprintf('%o', fileperms('/tmp')), -4) !== 0666){
     chmod("../diary.db", 0666);
 }

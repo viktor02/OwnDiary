@@ -37,7 +37,7 @@ $db->close();
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">OwnDiary</a>
+        <a class="navbar-brand" href="/">OwnDiary</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -61,12 +61,21 @@ $db->close();
     </nav>
     <div class="container">
         <h1>
-            <?php echo $username ?>
+            <?php echo $username ?> <a href="login/logout.php" class="btn btn-secondary btn-lg" role="button" aria-disabled="true">Logout</a>
         </h1>
-        <h3 class="text-muted">
-            <?php echo $name ?>
-        </h3>
-        <a href="login/logout.php" class="btn btn-secondary btn-lg" role="button" aria-disabled="true">Logout</a>
+        <div class="text-muted">
+            <?php 
+            
+            $profile = "
+            Email: <strong>$email</strong> <br>
+            Date of Birth: <strong>$birthday</strong> <br> 
+            Date of registration: <strong>$regdate</strong>
+            ";
+
+            echo $profile; ?>
+        </div>
+
+        
     </div>
 
     <script src="assets/js/jquery-3.3.1.slim.min.js"></script>

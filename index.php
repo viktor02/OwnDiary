@@ -75,10 +75,16 @@ if (!isset($_SESSION['email'])) {
             // Parse data from DB, order by 'id' desc(100..1)
             $results = $db->query("SELECT * FROM diary WHERE author = '$author' ORDER by id DESC");
             while ($row = $results->fetchArray()) {
-                echo "<a style='text-decoration: none'  href='record.php?id=".$row['id']."'><h3> ".$row['title']."</h3> </a>" // Header and link to full record
+                $text = htmlspecialchars_decode($row['text']);
+
+                echo "
+                <div>
+                <a style='text-decoration: none'  href='record.php?id=".$row['id']."'><h3> ".$row['title']."</h3> </a>" // Header and link to full record
                 ."<p class='font-italic text-muted'>".$row['date']." by <em>".$row['author']."</em></p>" // date & author
-                ."<p class='text-truncate'>".$row['text']."</p>" // truncated text
-                ."<hr>"; // divider
+                ."<p class='text-truncate' style='white-space: pre-line'>". mb_substr($text, 0, 250) ."... 
+                </p>
+                </div>
+                <hr> "; // divider
             }
 
             // Close connection
