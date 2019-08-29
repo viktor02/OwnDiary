@@ -28,9 +28,7 @@ CSS framework - Bootstrap 4
 * Исправил ошибки.
 * Добавил проверку на существование почты при регистрации.
 * Добавлена роль админа и пользователя. По-умолчанию ставится роль пользователя. Пока что необходимо вручную через базу ставить роль админа.
-
-<table><tr><th>id</th><th>email</th><th>name</th><th>username</th><th>password</th><th>salt</th><th>regdate</th><th>birthday</th><th>role</th><tr><tr><td>1</td><td>vitka.k@yandex.ru</td><td>Viktor</td><td>vitka-k</td><td>66dc72dc918e78efd0f8d3df8a48c7e83cbe7c90</td><td>RF3uBmBdMY</td><td>April 20, 2019, 00:56</td><td>1337-10-10</td><td>user</td></tr><tr><td>2</td><td>admin@adm.in</td><td>Admin Ivanovich</td><td>admin</td><td>bf738a329e6be4e34d0508a6347c5b805c746876</td><td>GlXqLKrIcW</td><td>April 20, 2019, 18:20</td><td>2011-08-19</td><td>admin</td></tr></table>
-
+<table><tr><th>id</th><th>email</th><th>name</th><th>username</th><th>password</th><th>salt</th><th>regdate</th><th>birthday</th><th>role</th><tr><tr><td>2</td><td>admin@adm.in</td><td>Admin Ivanovich</td><td>admin</td><td>bf738a329e6be4e34d0508a6347c5b805c746876</td><td>GlXqLKrIcW</td><td>April 20, 2019, 18:20</td><td>2011-08-19</td><td>admin</td></tr></table>
 ### 15.04.2019
 
 * Полностью изменен дизайн. Фреймворк - Bootstrap 4
