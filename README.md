@@ -1,5 +1,7 @@
 # OwnDiary
 
+![img](img/hello.png)
+
 ## Описание
 
 Личный дневник.
